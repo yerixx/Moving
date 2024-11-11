@@ -36,8 +36,10 @@ const Login = () => {
           </div>
         </div>
         <div className="goToSignup">
-          <div>아직 회원이 아니신가요?</div>
-          <div onClick={goToSignup}>회원가입</div>
+          <p>아직 회원이 아니신가요?</p>
+          <div className="signup" onClick={goToSignup}>
+            회원가입
+          </div>
         </div>
       </FindWapper>
     </Form>

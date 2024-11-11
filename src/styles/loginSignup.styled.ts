@@ -46,7 +46,12 @@ export const Input = styled.input`
   margin-top: 20px;
   background: ${({ theme }) => theme.black.lighter};
   &::placeholder {
+    opacity: 1;
     color: ${({ theme }) => theme.white.lighter};
+    transition: opacity 0.3s;
+  }
+  &:focus::placeholder {
+    opacity: 0;
   }
   &:focus {
     outline: none;
@@ -56,6 +61,8 @@ export const Input = styled.input`
 export const Submit = styled.input`
   ${inputStyle}
   margin-top: 40px;
+  font-size: 16px;
+  font-weight: bold;
   background: ${({ theme }) => theme.blue};
   transition: all 0.3s;
   cursor: pointer;
@@ -71,29 +78,37 @@ export const Desc = styled.p`
   padding: 10px 0;
 `;
 export const FindWapper = styled.div`
-  width: 260px;
-  margin: 40px 0;
+  width: 250px;
+  margin: 50px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 30px;
+  gap: 40px;
   color: ${(props) => props.theme.white.lighter};
-  cursor: pointer;
 
   .findauth {
     display: flex;
     justify-content: space-between;
+    padding: 0 30px;
     ${hoverStyle}
+    cursor: pointer;
   }
 
   .goToSignup {
     display: flex;
     justify-content: space-between;
     transition: all 0.3s;
-    div:first-child {
+    p {
       color: ${({ theme }) => theme.gray.lighter};
     }
-    ${hoverStyle}
+    .signup {
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        color: ${(props) => props.theme.blue};
+      }
+    }
   }
 `;
 
@@ -101,4 +116,25 @@ export const FindWapper = styled.div`
 export const Text = styled.p`
   font-size: 18px;
   color: ${({ theme }) => theme.gray.lighter};
+`;
+
+export const VerificationWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 440px;
+  align-items: center;
+
+  input:first-child {
+    flex: 2;
+  }
+  input:last-child {
+    flex: 1;
+    ${inputStyle}
+    /* background: ${({ theme }) => theme.blue}; */
+    transition: all 0.3s;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `;
