@@ -5,6 +5,7 @@ import Tv from "./pages/Tv";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import MainForGuest from "./pages/MainGuest";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/guest",
+        element: <MainForGuest />,
       },
     ],
   },

@@ -10,21 +10,13 @@ import {
   Submit,
   FindWapper,
 } from "../styles/loginSignup.styled";
-import LogoSVG from "../components/LogoSVG";
-import { GoToMainProps } from "../Root";
+import LogoSVG from "../components/Logo/LogoSVG";
+import { GoToProps } from "../Root";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { goToMain } = useOutletContext<GoToMainProps>();
-  const goToSignup = () => {
-    const handleconfirm: boolean = window.confirm(
-      "회원가입 페이지로 이동하시겠습니까?"
-    );
-    if (handleconfirm) {
-      navigate("/signup");
-    }
-  };
+  const { goToMain, goToSignup } = useOutletContext<GoToProps>();
 
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <Logo onClick={goToMain}>
@@ -36,7 +28,12 @@ const Login = () => {
           <Input type="text" placeholder="아이디" />
           <Input type="password" placeholder="비밀번호" />
         </InputWrapper>
-        <Submit type="submit" className="submitBtn" value={"로그인하기"} />
+        <Submit
+          type="submit"
+          className="submitBtn"
+          value={"로그인하기"}
+          onClick={() => navigate("/")}
+        />
         <FindWapper>
           <div className="findauth">
             <div onClick={() => alert("서비스 준비중 입니다.")}>

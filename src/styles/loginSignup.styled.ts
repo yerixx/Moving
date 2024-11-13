@@ -48,9 +48,10 @@ export const Logo = styled.div`
 
 export const Title = styled.h1`
   color: ${({ theme }) => theme.white.lighter};
-  font-size: 40px;
+  font-size: 36px;
   margin-bottom: 20px;
 `;
+
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;

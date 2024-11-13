@@ -1,7 +1,7 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { GoToMainProps } from "../Root";
+import { GoToProps } from "../Root";
 import { useForm } from "react-hook-form";
-import LogoSVG from "../components/LogoSVG";
+import LogoSVG from "../components/Logo/LogoSVG";
 import {
   Wrapper,
   Logo,
@@ -35,7 +35,7 @@ const Signup = () => {
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
-  const { goToMain } = useOutletContext<GoToMainProps>();
+  const { goToMain } = useOutletContext<GoToProps>();
 
   const [focusStates, setFocusStates] = useState({
     id: false,

@@ -25,25 +25,48 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export interface GoToMainProps {
+export interface GoToProps {
   goToMain: () => void;
+  goToLogin: () => void;
+  goToSignup: () => void;
 }
 
 const Root = () => {
   const navigate = useNavigate();
 
-  const goToMain = () => {
+  const goToMain = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
     const handleconfirm: boolean =
       window.confirm("메인 페이지로 이동하시겠습니까?");
     if (handleconfirm) {
       navigate("/");
     }
   };
+
+  const goToLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const handleConfirm = window.confirm("로그인 페이지로 이동하시겠습니까?");
+
+    if (handleConfirm) {
+      navigate("/login");
+    }
+  };
+  const goToSignup = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    const handleconfirm: boolean = window.confirm(
+      "회원가입 페이지로 이동하시겠습니까?"
+    );
+    if (handleconfirm) {
+      navigate("/signup");
+    }
+  };
+
   return (
     <>
       <GlobalStyle />
       <Header />
-      <Outlet context={{ goToMain }} />
+      <Outlet context={{ goToMain, goToLogin, goToSignup }} />
     </>
   );
 };
