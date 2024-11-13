@@ -20,15 +20,30 @@ const inputStyle = css`
 `;
 
 //common
-export const Form = styled.form`
-  /* margin-top: 60px; */
+export const Wrapper = styled.main`
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   background: ${({ theme }) => theme.black.darker};
+  overflow-y: hidden;
+`;
+export const Form = styled.form`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  padding-left: 60px;
 `;
 
 export const Title = styled.h1`
@@ -41,20 +56,36 @@ export const InputWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const Input = styled.input`
+export const InputContainer = styled.div`
+  position: relative;
+  transition: all 500ms;
+`;
+export const Input = styled.input<{ hasError?: boolean }>`
   ${inputStyle}
   margin-top: 20px;
+  padding-top: 10px;
+  padding: 30px 0 18px 20px;
+  border: 1px solid ${(props) => (props.hasError ? "inherit" : "inherit")};
   background: ${({ theme }) => theme.black.lighter};
-  &::placeholder {
-    opacity: 1;
-    color: ${({ theme }) => theme.white.lighter};
-    transition: opacity 0.3s;
-  }
-  &:focus::placeholder {
-    opacity: 0;
-  }
   &:focus {
     outline: none;
+    border-color: ${(props) => (props.hasError ? "#f00" : "inherit")};
+  }
+`;
+export const Label = styled.label<{ hasError?: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  color: ${(props) => (props.hasError ? "#f00" : props.theme.white.lighter)};
+  user-select: none;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 150ms cubic-bezier(0.4, 0, 0.2, 1), top 150ms;
+  &.focused {
+    top: 0;
+    left: 20px;
+    transform: scale(0.9) translateY(150%);
+    transform-origin: left;
+    color: ${(props) => (props.hasError ? "#f00" : props.theme.blue)};
   }
 `;
 
@@ -83,7 +114,7 @@ export const FindWapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   color: ${(props) => props.theme.white.lighter};
 
   .findauth {
@@ -96,6 +127,7 @@ export const FindWapper = styled.div`
 
   .goToSignup {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     transition: all 0.3s;
     p {
@@ -119,22 +151,36 @@ export const Text = styled.p`
 `;
 
 export const VerificationWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   gap: 10px;
   width: 440px;
   align-items: center;
-
-  input:first-child {
-    flex: 2;
+`;
+export const PhoneNumberInput = styled.input<{ hasError: boolean }>`
+  ${inputStyle}
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-left: 20px;
+  background: ${({ theme }) => theme.black.lighter};
+  &:focus {
+    outline: none;
+    border-color: ${(props) => (props.hasError ? "#f00" : "inherit")};
   }
-  input:last-child {
-    flex: 1;
-    ${inputStyle}
-    /* background: ${({ theme }) => theme.blue}; */
-    transition: all 0.3s;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
+`;
+
+export const PhoneButton = styled.input<{ disabled: boolean }>`
+  ${inputStyle}
+  width: 100%;
+  margin-top: 20px;
+  background: ${(props) =>
+    props.disabled ? "#222" : props.theme.black.lighter};
+  color: ${(props) => (props.disabled ? "#999" : props.theme.white.lighter)};
+  transition: all 0.3s;
+  /* cursor: pointer; */
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  &:hover {
+    opacity: ${(props) => (props.disabled ? 1 : 0.8)};
   }
 `;

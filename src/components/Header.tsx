@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, useAnimation, useScroll } from "framer-motion";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-const Nav = styled(motion.nav)`
+interface INav {
+  $signupMatch?: PathMatch<string> | null;
+  $loginMatch?: PathMatch<string> | null;
+}
+
+const Nav = styled(motion.nav)<INav>`
   width: 100%;
   height: 60px;
-  display: flex;
+  display: ${({ $signupMatch, $loginMatch }) =>
+    $signupMatch === null || $loginMatch === null ? "none" : "flex"};
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
@@ -112,6 +118,8 @@ const Header = () => {
   const homeMatch = useMatch("/");
   const homeModalMatch = useMatch("/movies/*");
   const tvMatch = useMatch("/tv");
+  const signupMatch = useMatch("/signup");
+  const loginMatch = useMatch("/login");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -155,7 +163,13 @@ const Header = () => {
   };
 
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
+    <Nav
+      variants={navVariants}
+      animate={navAnimation}
+      initial={"top"}
+      $signupMatch={signupMatch}
+      $loginMatch={loginMatch}
+    >
       <Col>
         <Logo
           onClick={goToMain}

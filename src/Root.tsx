@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import theme from "./theme";
+import { createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
+import { useNavigate } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -25,16 +25,27 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+export interface GoToMainProps {
+  goToMain: () => void;
+}
+
+const Root = () => {
+  const navigate = useNavigate();
+
+  const goToMain = () => {
+    const handleconfirm: boolean =
+      window.confirm("메인 페이지로 이동하시겠습니까?");
+    if (handleconfirm) {
+      navigate("/");
+    }
+  };
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Header />
-        <Outlet />
-      </ThemeProvider>
+      <GlobalStyle />
+      <Header />
+      <Outlet context={{ goToMain }} />
     </>
   );
 };
 
-export default App;
+export default Root;
