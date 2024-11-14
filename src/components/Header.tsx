@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   width: 100%;
-  height: 60px;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,14 +25,10 @@ const Col = styled.div`
 `;
 
 const Logo = styled(motion.svg)`
-  width: 95px;
-  height: 25px;
-  fill: ${(props) => props.theme.red};
+  width: 130px;
+  height: 35px;
+  fill: ${(props) => props.theme.blue};
   cursor: pointer;
-  path {
-    stroke-width: 7px;
-    stroke: ${(props) => props.theme.white.darker};
-  }
 `;
 
 const Items = styled.ul`
@@ -66,16 +62,15 @@ const Circle = styled(motion.span)`
 `;
 
 const Search = styled.form`
-  color: ${(props) => props.theme.red};
   display: flex;
   align-items: center;
   gap: 4px;
   position: relative;
   cursor: pointer;
   svg {
-    width: 18px;
-    height: 18px;
-    fill: ${(props) => props.theme.red};
+    width: 20px;
+    height: 20px;
+    fill: ${(props) => props.theme.white.darker};
   }
 `;
 
@@ -85,7 +80,7 @@ const Input = styled(motion.input)`
   left: -170px;
   transform-origin: right center;
   background: transparent;
-  color: ${(props) => props.theme.red};
+  color: ${(props) => props.theme.white.darker};
   font-size: 18px;
   border: none;
   border-bottom: 1px solid ${(props) => props.theme.white.darker};
@@ -110,20 +105,20 @@ interface IForm {
 
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch("/");
-  const homeModalMatch = useMatch("/movies/*");
-  const tvMatch = useMatch("/tv");
+  const homeMatch = useMatch("/home");
+  const homeModalMatch = useMatch("/home/movies/*");
+  const tvMatch = useMatch("/home/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const main = useNavigate();
   const goToMain = () => {
-    main("/");
+    main("/home");
   };
 
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    main(`/search?keyword=${data.keyword}`);
+    main(`/home/search?keyword=${data.keyword}`);
     setValue("keyword", "");
   };
 
@@ -160,26 +155,48 @@ const Header = () => {
       <Col>
         <Logo
           onClick={goToMain}
-          variants={logoVariants}
-          initial="normal"
-          whileHover="active"
-          width="1024"
-          height="276.742"
-          viewBox="0 0 1024 276.742"
+          // variants={logoVariants}
+          // initial="normal"
+          // whileHover="active"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 208.49 54.99"
         >
-          <motion.path d="M140.803 258.904c-15.404 2.705-31.079 3.516-47.294 5.676l-49.458-144.856v151.073c-15.404 1.621-29.457 3.783-44.051 5.945v-276.742h41.08l56.212 157.021v-157.021h43.511v258.904zm85.131-157.558c16.757 0 42.431-.811 57.835-.811v43.24c-19.189 0-41.619 0-57.835.811v64.322c25.405-1.621 50.809-3.785 76.482-4.596v41.617l-119.724 9.461v-255.39h119.724v43.241h-76.482v58.105zm237.284-58.104h-44.862v198.908c-14.594 0-29.188 0-43.239.539v-199.447h-44.862v-43.242h132.965l-.002 43.242zm70.266 55.132h59.187v43.24h-59.187v98.104h-42.433v-239.718h120.808v43.241h-78.375v55.133zm148.641 103.507c24.594.539 49.456 2.434 73.51 3.783v42.701c-38.646-2.434-77.293-4.863-116.75-5.676v-242.689h43.24v201.881zm109.994 49.457c13.783.812 28.377 1.623 42.43 3.242v-254.58h-42.43v251.338zm231.881-251.338l-54.863 131.615 54.863 145.127c-16.217-2.162-32.432-5.135-48.648-7.838l-31.078-79.994-31.617 73.51c-15.678-2.705-30.812-3.516-46.484-5.678l55.672-126.75-50.269-129.992h46.482l28.377 72.699 30.27-72.699h47.295z" />
+          <polygon
+            className="cls-1"
+            points="36.1 27.43 35.68 27.43 32.87 6.99 16.32 6.98 14.4 11.08 17.61 11.08 17.14 14.62 9.41 14.62 7.05 20.43 16.35 20.69 13.79 40.24 11.42 40.24 10.64 43.02 7.14 43.02 5.76 47.12 12.89 47.12 16.3 47.12 23.77 47.12 26.86 27.64 27.19 27.64 29.4 47.12 38.09 47.12 44.51 27.64 44.88 27.64 43.37 47.12 53.93 47.12 56.88 6.99 42.5 6.98 36.1 27.43"
+          />
+          <path
+            className="cls-1"
+            d="M89,14.25a9.64,9.64,0,0,0-4.48-3.51A19.66,19.66,0,0,0,77.26,9.6a21.16,21.16,0,0,0-7.4,1.14,11.86,11.86,0,0,0-5,3.51,16.21,16.21,0,0,0-3,6.06,45.82,45.82,0,0,0-1.43,8.79,44.78,44.78,0,0,0,0,8.48,13.87,13.87,0,0,0,2,6.06,9.57,9.57,0,0,0,4.47,3.64,19.25,19.25,0,0,0,7.41,1.21,20.77,20.77,0,0,0,7.6-1.21,11.93,11.93,0,0,0,5-3.64,16.16,16.16,0,0,0,2.92-6.06,46.09,46.09,0,0,0,1.35-8.48,42.87,42.87,0,0,0-.08-8.79A13.8,13.8,0,0,0,89,14.25ZM79.51,35.18a3.09,3.09,0,0,1-1.14,2.6,6.53,6.53,0,0,1-3.15.57H70.86l1.19-15.44c.11-1.35.49-2.22,1.16-2.6a6.47,6.47,0,0,1,3.09-.57h4.4Z"
+          />
+          <polygon
+            className="cls-1"
+            points="114.06 10.49 107.76 34.04 107.28 34.04 104.65 10.49 93.64 10.49 98.88 47.6 111.24 47.6 125.07 10.49 114.06 10.49"
+          />
+          <polygon
+            className="cls-1"
+            points="124.82 47.6 135.27 47.6 138.13 10.49 127.68 10.49 124.82 47.6"
+          />
+          <path
+            className="cls-1"
+            d="M160.66,26.52h-.22a13,13,0,0,0,0-1.83,3.27,3.27,0,0,0-.27-1l-7-13.16h-9.83L140.49,47.6h10.45l1.23-16h.22a13,13,0,0,0,0,1.83,2.82,2.82,0,0,0,.27,1l6.95,13.16h9.84l2.86-37.11H161.89Z"
+          />
+          <path
+            className="cls-1"
+            d="M191.16,28.33l-1.56,7.36,4-1L193,36.94c-.08,1.06-1.14,1.47-1.73,1.78a6.16,6.16,0,0,1-2.8.47H184l1.6-16.72c.1-1.18,1.35-2.08,2.31-2.48a14.28,14.28,0,0,1,4.88-.59,30.15,30.15,0,0,1,3.55.22,4.76,4.76,0,0,1,1.14.15l4-7.85c-.51-.19-.58-1.25-1.42-1.43s-1.23-.27-2.17-.42-1.89-.26-2.83-.35-1.75-.12-2.45-.12a25.21,25.21,0,0,0-8,1.09,12.19,12.19,0,0,0-5.36,3.44,15.72,15.72,0,0,0-3.2,6A41.17,41.17,0,0,0,174.57,29a46.68,46.68,0,0,0,0,8.48,14,14,0,0,0,1.95,6.09A9.55,9.55,0,0,0,181,47.26a19.18,19.18,0,0,0,7.45,1.23c7,0,6-2.48,11-5.19l3.27-18Z"
+          />
         </Logo>
         <Items>
           <Item>
-            <Link to={"/"}>
-              Home
+            <Link to={"/home"}>
+              영화
               {homeMatch && <Circle layoutId="circle" />}
               {homeModalMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
-            <Link to={"/tv"}>
-              TV Shows {tvMatch && <Circle layoutId="circle" />}
+            <Link to={"/home"}>
+              드라마 {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
         </Items>

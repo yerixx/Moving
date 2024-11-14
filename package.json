@@ -1,6 +1,8 @@
 {
   "name": "netflix",
   "version": "0.1.0",
+  "name": "netflix",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
