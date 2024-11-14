@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import theme from "./theme";
-import Header from "./components/Header";
+import { createGlobalStyle } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -10,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
   }
-
+ 
   * {
     margin: 0;
     padding: 0;
@@ -32,16 +31,49 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const App = () => {
+export interface GoToProps {
+  goToMain: () => void;
+  goToLogin: () => void;
+  goToSignup: () => void;
+}
+
+const Root = () => {
+  const navigate = useNavigate();
+  const goToMain = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const handleconfirm: boolean =
+      window.confirm("메인 페이지로 이동하시겠습니까?");
+    if (handleconfirm) {
+      navigate("/");
+    }
+  };
+
+  const goToLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const handleConfirm = window.confirm("로그인 페이지로 이동하시겠습니까?");
+
+    if (handleConfirm) {
+      navigate("/login");
+    }
+  };
+  const goToSignup = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    const handleconfirm: boolean = window.confirm(
+      "회원가입 페이지로 이동하시겠습니까?"
+    );
+    if (handleconfirm) {
+      navigate("/signup");
+    }
+  };
+
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Header />
-        <Outlet />
-      </ThemeProvider>
+      <GlobalStyle />
+
+      <Outlet context={{ goToMain, goToLogin, goToSignup }} />
     </>
   );
 };
 
-export default App;
+export default Root;

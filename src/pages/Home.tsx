@@ -18,6 +18,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
 import YouTube from "react-youtube";
+import Header from "../components/Header";
 
 const Container = styled.div`
   width: 100%;
@@ -450,6 +451,7 @@ const Home = () => {
 
   return (
     <Container>
+      <Header />
       {nowPlayingLoading || todayLoading ? (
         <Loader>Loading...</Loader>
       ) : (

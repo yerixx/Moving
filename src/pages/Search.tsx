@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { makeImagePath } from "../utils";
 import Pagination from "react-js-pagination";
 import { useState } from "react";
+import Header from "../components/Header";
 
 interface GeneresItem {
   id: number;
@@ -186,6 +187,7 @@ const Search = () => {
         <div>Loading...</div>
       ) : (
         <Wrapper>
+          <Header />
           <SearchTitle>
             <b>"{keyword}"</b>검색 결과
           </SearchTitle>
@@ -221,7 +223,6 @@ const Search = () => {
                   <MovieTitle>{movie.title || movie.original_title}</MovieTitle>
                   <MovieDate>개봉일: {movie.release_date}</MovieDate>
                   <MovieValue>{movie.adult ? "+18" : "ALL"}</MovieValue>
-
                   <MovieRate>
                     <span>평점:</span> {movie.vote_average?.toFixed(2)} /{" "}
                     <span>Members:</span>{" "}
