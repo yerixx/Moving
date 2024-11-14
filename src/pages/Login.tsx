@@ -74,7 +74,7 @@ const Login = () => {
           type="submit"
           className="submitBtn"
           value={"로그인하기"}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/home")}
         />
         <FindWapper>
           <div className="findauth">

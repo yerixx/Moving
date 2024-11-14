@@ -14,19 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/movies/:movieId",
-        element: <Home />,
-      },
-      {
-        path: "tv",
-        element: <Tv />,
-      },
-      {
-        path: "search",
-        element: <Search />,
+        element: <MainForGuest />,
       },
       {
         path: "/login",
@@ -37,8 +25,20 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/guest",
-        element: <MainForGuest />,
+        path: "/home",
+        element: <Home />,
+      },
+      {
+        path: "/home/movies/:movieId",
+        element: <Home />,
+      },
+      {
+        path: "/tv",
+        element: <Tv />,
+      },
+      {
+        path: "/home/search",
+        element: <Search />,
       },
     ],
   },

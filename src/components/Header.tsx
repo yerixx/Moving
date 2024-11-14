@@ -105,20 +105,20 @@ interface IForm {
 
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch("/");
-  const homeModalMatch = useMatch("/movies/*");
-  const tvMatch = useMatch("/tv");
+  const homeMatch = useMatch("/home");
+  const homeModalMatch = useMatch("/home/movies/*");
+  const tvMatch = useMatch("/home/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const main = useNavigate();
   const goToMain = () => {
-    main("/");
+    main("/home");
   };
 
   const { register, handleSubmit, setValue } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    main(`/search?keyword=${data.keyword}`);
+    main(`/home/search?keyword=${data.keyword}`);
     setValue("keyword", "");
   };
 
@@ -155,9 +155,9 @@ const Header = () => {
       <Col>
         <Logo
           onClick={goToMain}
-          variants={logoVariants}
-          initial="normal"
-          whileHover="active"
+          // variants={logoVariants}
+          // initial="normal"
+          // whileHover="active"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 208.49 54.99"
         >
@@ -188,14 +188,14 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to={"/"}>
+            <Link to={"/home"}>
               영화
               {homeMatch && <Circle layoutId="circle" />}
               {homeModalMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
-            <Link to={"/tv"}>
+            <Link to={"/home"}>
               드라마 {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>

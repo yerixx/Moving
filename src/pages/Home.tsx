@@ -324,7 +324,7 @@ const offset = 4;
 
 const Home = () => {
   const history = useNavigate();
-  const movieMatch = useMatch("/movies/:movieId");
+  const movieMatch = useMatch("/home/movies/:movieId");
   const { data: nowPlayingData, isLoading: nowPlayingLoading } =
     useQuery<GetMoviesResult>({
       queryKey: ["nowPlaying"],
@@ -369,10 +369,10 @@ const Home = () => {
   // const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const onBoxClick = (movieId: number) => {
-    history(`/movies/${movieId}`);
+    history(`/home/movies/${movieId}`);
   };
   const onOverlayClick = () => {
-    history("/");
+    history("/home");
   };
 
   const clickedMovie =
