@@ -15,13 +15,22 @@ const Nav = styled(motion.nav)`
   font-size: 18px;
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 100;
+
+  @media (max-width: 768px) {
+    height: 60px;
+    padding: 0 15px;
+  }
 `;
 
 const Col = styled.div`
   display: flex;
   align-items: center;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    gap: 20px;
+  }
 `;
 
 const Logo = styled(motion.svg)`
@@ -29,12 +38,21 @@ const Logo = styled(motion.svg)`
   height: 35px;
   fill: ${(props) => props.theme.blue};
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 25px;
+  }
 `;
 
 const Items = styled.ul`
   display: flex;
   align-items: center;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    gap: 15px;
+  }
 `;
 
 const Item = styled.li`
@@ -47,18 +65,14 @@ const Item = styled.li`
   &:hover {
     opacity: 0.7;
   }
-`;
 
-const Circle = styled(motion.span)`
-  position: absolute;
-  bottom: -7px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: ${(props) => props.theme.red};
+  a {
+    font-size: 18px;
+
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
+  }
 `;
 
 const Search = styled.form`
@@ -67,17 +81,27 @@ const Search = styled.form`
   gap: 4px;
   position: relative;
   cursor: pointer;
+
   svg {
     width: 20px;
     height: 20px;
     fill: ${(props) => props.theme.white.darker};
+
+    @media (max-width: 768px) {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    position: static;
   }
 `;
 
 const Input = styled(motion.input)`
-  width: 200px;
+  width: 217px;
   position: absolute;
-  left: -170px;
+  left: -180px;
   transform-origin: right center;
   background: transparent;
   color: ${(props) => props.theme.white.darker};
@@ -87,17 +111,27 @@ const Input = styled(motion.input)`
   &:focus {
     outline: none;
   }
-`;
 
-const logoVariants = {
-  normal: { fillOpacity: 1 },
-  active: {
-    fillOpacity: [0, 1, 0],
-    transition: {
-      repeat: Infinity,
-    },
-  },
-};
+  @media (max-width: 768px) {
+    width: 100%;
+    left: 0;
+    top: 60px;
+    transform-origin: top center;
+    background-color: ${(props) => props.theme.black.darker};
+    padding: 10px 20px;
+    border: 1px solid ${(props) => props.theme.white.darker};
+    font-size: 15px;
+    border-radius: 4px;
+  }
+
+  &::placeholder {
+    font-size: 15px;
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
+  }
+`;
 
 interface IForm {
   keyword: string;
@@ -105,9 +139,7 @@ interface IForm {
 
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch("/home");
-  const homeModalMatch = useMatch("/home/movies/*");
-  const tvMatch = useMatch("/home/tv");
+
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -141,10 +173,18 @@ const Header = () => {
     if (searchOpen) {
       inputAnimation.start({
         scaleX: 0,
+        ...(window.innerWidth <= 768 && {
+          scaleY: 0,
+          y: -10,
+        }),
       });
     } else {
       inputAnimation.start({
         scaleX: 1,
+        ...(window.innerWidth <= 768 && {
+          scaleY: 1,
+          y: 0,
+        }),
       });
     }
     setSearchOpen((prev) => !prev);
@@ -155,9 +195,6 @@ const Header = () => {
       <Col>
         <Logo
           onClick={goToMain}
-          // variants={logoVariants}
-          // initial="normal"
-          // whileHover="active"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 208.49 54.99"
         >
@@ -188,16 +225,10 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to={"/home"}>
-              영화
-              {homeMatch && <Circle layoutId="circle" />}
-              {homeModalMatch && <Circle layoutId="circle" />}
-            </Link>
+            <Link to={"/home"}>영화</Link>
           </Item>
           <Item>
-            <Link to={"/tv"}>
-              드라마 {tvMatch && <Circle layoutId="circle" />}
-            </Link>
+            <Link to={"/tv"}>드라마 & 예능</Link>
           </Item>
         </Items>
       </Col>
@@ -205,7 +236,9 @@ const Header = () => {
         <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={openSearch}
-            animate={{ x: searchOpen ? -194 : 0 }}
+            animate={{
+              x: searchOpen ? (window.innerWidth <= 768 ? 0 : -210) : 0,
+            }}
             transition={{ type: "linear" }}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -216,9 +249,15 @@ const Header = () => {
             {...register("keyword", { required: true })}
             type="text"
             transition={{ type: "linear" }}
-            placeholder="Search for MOVIE or TV"
+            placeholder="영화나 TV 프로그램을 검색해보세요"
             animate={inputAnimation}
-            initial={{ scaleX: 0 }}
+            initial={{
+              scaleX: 0,
+              ...(window.innerWidth <= 768 && {
+                scaleY: 0,
+                y: -10,
+              }),
+            }}
           />
         </Search>
       </Col>

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { motion, AnimatePresence, delay, useScroll } from "framer-motion";
@@ -17,7 +17,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
-import YouTube from "react-youtube";
 import Header from "../components/Header";
 import MovieModal from "../components/MovieModal";
 
@@ -26,6 +25,11 @@ const Container = styled.div`
   margin-top: 60px;
   background: ${(props) => props.theme.black.darker};
   overflow-x: hidden;
+  min-height: 100vh;
+
+  @media (max-width: 768px) {
+    margin-top: 50px;
+  }
 `;
 
 const Loader = styled.div`
@@ -44,48 +48,67 @@ const Title = styled.h2`
   font-size: 70px;
   margin-bottom: 10px;
   margin-top: 100px;
+
+  @media (max-width: 1050px) {
+    font-size: 50px;
+    margin-top: 80px;
+  }
+
+  @media (max-width: 800px) {
+    font-size: 30px;
+    margin-top: 60px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+    margin-top: 40px;
+  }
 `;
 
 const Overview = styled.p`
   font-size: 24px;
   width: 50%;
   line-height: 1.5;
+
+  @media (max-width: 1200px) {
+    font-size: 20px;
+    width: 60%;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    width: 80%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    width: 90%;
+  }
 `;
 
 const SliderWrapper = styled.div`
   position: relative;
   margin-bottom: 100px;
   padding: 0 60px;
+
   .slick-slide {
     padding: 0 50px;
     @media (max-width: 768px) {
       padding: 0 30px;
     }
-  }
-  .slick-list {
-    overflow: visible;
-    margin: 0 -10px;
-  }
-  .slick-track {
-    display: flex;
-    align-items: stretch;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .slick-prev,
-  .slick-next {
-    z-index: 1;
-    width: 40px;
-    height: 40px;
-    &:before {
-      font-size: 40px;
+    @media (max-width: 480px) {
+      padding: 0 15px;
     }
   }
-  .slick-prev {
-    left: 25px;
+
+  @media (max-width: 768px) {
+    padding: 0 30px;
+    margin-bottom: 60px;
   }
-  .slick-next {
-    right: 25px;
+
+  @media (max-width: 480px) {
+    padding: 0 15px;
+    margin-bottom: 40px;
   }
 `;
 
@@ -100,8 +123,17 @@ const SlideBox = styled(motion.div)<{ $bgPhoto: string }>`
     transform: scale(1.02);
     transition: transform 0.3s ease-in-out;
   }
+
+  @media (max-width: 1200px) {
+    height: 35vw;
+  }
+
   @media (max-width: 768px) {
     height: 50vw;
+  }
+
+  @media (max-width: 480px) {
+    height: 60vw;
   }
 `;
 
@@ -121,10 +153,26 @@ const SlideInfo = styled(motion.div)`
 
 const SlideTitle = styled.h2`
   font-size: 32px;
-  margin-bottom: 10px;
-  margin-left: 50px;
   margin-bottom: 30px;
+  margin-left: 50px;
   color: ${(props) => props.theme.white.darker};
+
+  @media (max-width: 1050px) {
+    font-size: 28px;
+    margin-left: 40px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    margin-left: 20px;
+    margin-bottom: 15px;
+  }
 `;
 
 const SlideRank = styled.span`
@@ -134,9 +182,19 @@ const SlideRank = styled.span`
   top: -10px;
   left: -70px;
   color: ${(props) => props.theme.white.darker};
+
+  @media (max-width: 1050px) {
+    font-size: 70px;
+    left: -60px;
+  }
+
   @media (max-width: 768px) {
-    font-size: 60px;
-    left: -50px;
+    font-size: 24px;
+    left: 10px;
+    top: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 6px 10px;
   }
 `;
 
@@ -146,6 +204,7 @@ const Genere = styled.div`
   left: 10px;
   color: ${(props) => props.theme.white.darker};
   font-size: 14px;
+
   span {
     padding: 2px 6px;
     border-radius: 4px;
@@ -155,6 +214,24 @@ const Genere = styled.div`
     opacity: 0.8;
     font-weight: 600;
   }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+
+    span {
+      padding: 1px 4px;
+      margin-right: 4px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+
+    span {
+      padding: 1px 3px;
+      margin-right: 3px;
+    }
+  }
 `;
 
 const SubTitle = styled.h2`
@@ -162,9 +239,47 @@ const SubTitle = styled.h2`
   margin-bottom: 30px;
   margin-left: 50px;
   color: ${(props) => props.theme.white.darker};
+
+  @media (max-width: 1050px) {
+    font-size: 24px;
+    margin-left: 40px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin-left: 20px;
+    margin-bottom: 15px;
+  }
 `;
 
 const offset = 4;
+
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowSize;
+};
 
 const Home = () => {
   const history = useNavigate();
@@ -186,8 +301,6 @@ const Home = () => {
       queryFn: getTodayMovies,
     });
 
-  // const [index, setIndex] = useState(0);
-  // const [leaving, setLeaving] = useState(false);
   const { scrollY } = useScroll();
 
   const sliderRef = useRef<Slider>(null);
@@ -199,18 +312,6 @@ const Home = () => {
   const handleNext = () => {
     sliderRef.current?.slickNext();
   };
-
-  // const increaseIndex = () => {
-  //   if (nowPlayingData) {
-  //     if (leaving) return;
-  //     setLeaving(true);
-  //     const totalMovies = nowPlayingData?.results.length - 12;
-  //     const maxIndex = Math.ceil(totalMovies / offset) - 1;
-  //     setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-  //   }
-  // };
-
-  // const toggleLeaving = () => setLeaving((prev) => !prev);
 
   const [currentSection, setCurrentSection] = useState("hot");
 
@@ -270,10 +371,24 @@ const Home = () => {
         },
       },
       {
+        breakpoint: 1000,
+        settings: {
+          slidesToShow: 2.5,
+          slidesToScroll: 2,
+        },
+      },
+      {
         breakpoint: 768,
         settings: {
           slidesToShow: 2.2,
           slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -342,6 +457,19 @@ const Home = () => {
     background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
       url(${(props) => props.$bgPhoto}) center/cover no-repeat;
     color: ${(props) => props.theme.white.darker};
+
+    @media (max-width: 1200px) {
+      height: 500px;
+    }
+
+    @media (max-width: 768px) {
+      height: 400px;
+      padding: 0 30px;
+    }
+
+    @media (max-width: 480px) {
+      height: 300px;
+    }
   `;
 
   const bannerSettings = {
@@ -365,6 +493,13 @@ const Home = () => {
     bannerSliderRef.current?.slickNext();
   };
 
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  const { width } = useWindowSize();
+
   return (
     <Container>
       <Header />
@@ -381,7 +516,15 @@ const Home = () => {
                   $bgPhoto={makeImagePath(movie.backdrop_path || "")}
                 >
                   <Title>{movie.title}</Title>
-                  <Overview>{movie.overview}</Overview>
+                  <Overview>
+                    {width > 1200
+                      ? truncateText(movie.overview, 200)
+                      : width > 768
+                      ? truncateText(movie.overview, 150)
+                      : width > 480
+                      ? truncateText(movie.overview, 100)
+                      : truncateText(movie.overview, 50)}
+                  </Overview>
                 </BannerItem>
               ))}
             </Slider>

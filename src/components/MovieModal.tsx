@@ -3,6 +3,12 @@ import { motion } from "framer-motion";
 import { makeImagePath } from "../utils";
 import YouTube from "react-youtube";
 
+import { FaRegStar } from "react-icons/fa";
+import { IoPeople } from "react-icons/io5";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { GoCodeReview } from "react-icons/go";
+import { BiSolidCameraMovie } from "react-icons/bi";
+
 const ModalBox = styled(motion.div)`
   position: absolute;
   left: 0%;
@@ -103,13 +109,20 @@ const MovieInfoWrap = styled.div`
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
+
   span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 16px;
     font-weight: 500;
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
+    svg {
+      color: ${(props) => props.theme.blue};
+    }
   }
 `;
 
@@ -133,9 +146,9 @@ const ReviewTitle = styled.h3`
   color: ${(props) => props.theme.blue};
   display: flex;
   align-items: center;
-  &:before {
-    content: "✍️";
-    margin-right: 10px;
+  gap: 10px;
+  svg {
+    color: ${(props) => props.theme.white.darker};
   }
 `;
 
@@ -185,9 +198,9 @@ const VideoTitle = styled.h3`
   color: ${(props) => props.theme.blue};
   display: flex;
   align-items: center;
-  &:before {
-    content: "🎬";
-    margin-right: 10px;
+  gap: 10px;
+  svg {
+    color: ${(props) => props.theme.white.darker};
   }
 `;
 
@@ -221,6 +234,45 @@ const NoContent = styled.p`
   color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
   padding: 20px;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  z-index: 100;
+
+  &:hover {
+    background-color: ${(props) => props.theme.blue};
+    transform: scale(1.1);
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
 `;
 
 interface MovieModalProps {
@@ -258,22 +310,31 @@ const MovieModal = ({
           },
         }}
       >
+        <CloseButton onClick={onOverlayClick} />
         <MovieInfo>
           <MovieHeader>
             <MoviePoster $bgPhoto={makeImagePath(movie.poster_path)} />
             <MovieBasicInfo>
               <MovieTitle>{movie.title}</MovieTitle>
               <MovieInfoWrap>
-                <span>⭐ {movie.vote_average.toFixed(1)}</span>
-                <span>👥 {movie.popularity.toFixed(0)}</span>
-                <span>📅 {movie.release_date}</span>
+                <span>
+                  <FaRegStar /> {movie.vote_average.toFixed(1)}
+                </span>
+                <span>
+                  <IoPeople /> {movie.popularity.toFixed(0)}
+                </span>
+                <span>
+                  <FaRegCalendarAlt /> {movie.release_date}
+                </span>
               </MovieInfoWrap>
               <MovieOverView>{movie.overview}</MovieOverView>
             </MovieBasicInfo>
           </MovieHeader>
 
           <ReviewSection>
-            <ReviewTitle>리뷰</ReviewTitle>
+            <ReviewTitle>
+              <GoCodeReview /> 리뷰
+            </ReviewTitle>
             {reviewsData?.find((review: any) => review.id === movie.id)?.results
               .length ? (
               reviewsData
@@ -295,27 +356,34 @@ const MovieModal = ({
           </ReviewSection>
 
           <VideoSection>
-            <VideoTitle>관련 영상</VideoTitle>
-            {videosData
-              ?.find((video: any) => video.id === movie.id)
-              ?.results.slice(0, 3)
-              .map((video: any) => (
-                <VideoItem key={video.id}>
-                  <YouTube
-                    videoId={video.key}
-                    opts={{
-                      width: "100%",
-                      height: "400px",
-                      playerVars: {
-                        autoplay: 0,
-                        modestbranding: 1,
-                        rel: 0,
-                      },
-                    }}
-                    className="youtube-container"
-                  />
-                </VideoItem>
-              ))}
+            <VideoTitle>
+              <BiSolidCameraMovie /> 관련 영상
+            </VideoTitle>
+            {videosData?.find((video: any) => video.id === movie.id)?.results
+              .length ? (
+              videosData
+                ?.find((video: any) => video.id === movie.id)
+                ?.results.slice(0, 3)
+                .map((video: any) => (
+                  <VideoItem key={video.id}>
+                    <YouTube
+                      videoId={video.key}
+                      opts={{
+                        width: "100%",
+                        height: "400px",
+                        playerVars: {
+                          autoplay: 0,
+                          modestbranding: 1,
+                          rel: 0,
+                        },
+                      }}
+                      className="youtube-container"
+                    />
+                  </VideoItem>
+                ))
+            ) : (
+              <NoContent>관련 영상이 없습니다.</NoContent>
+            )}
           </VideoSection>
         </MovieInfo>
         <MovieBackground $bgPhoto={makeImagePath(movie.backdrop_path)} />

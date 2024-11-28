@@ -44,6 +44,10 @@ const router = createBrowserRouter([
         path: "/home/search",
         element: <Search />,
       },
+      {
+        path: "/home/search/movies/:movieId",
+        element: <Search />,
+      },
     ],
   },
 ]);

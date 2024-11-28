@@ -17,12 +17,19 @@ const Wrapper = styled.div`
   margin-bottom: 60px;
   position: relative;
   padding: 0 30px;
+
   .slick-slide {
     padding: 0 10px;
+
+    @media (max-width: 768px) {
+      padding: 0 5px;
+    }
   }
+
   .slick-list {
-    /* overflow: visible; */
+    overflow: visible;
   }
+
   .slick-prev,
   .slick-next {
     z-index: 1;
@@ -31,12 +38,38 @@ const Wrapper = styled.div`
     &:before {
       font-size: 40px;
     }
+
+    @media (max-width: 768px) {
+      width: 30px;
+      height: 30px;
+      &:before {
+        font-size: 30px;
+      }
+    }
   }
+
   .slick-prev {
     left: 25px;
+    @media (max-width: 768px) {
+      left: 15px;
+    }
   }
+
   .slick-next {
     right: 25px;
+    @media (max-width: 768px) {
+      right: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 40px;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 30px;
+    padding: 0 15px;
   }
 `;
 
@@ -49,8 +82,17 @@ const SlideItem = styled(motion.div)<{ $bgPhoto: string }>`
   cursor: pointer;
   transform-origin: center center;
   overflow: hidden;
+
+  @media (max-width: 1200px) {
+    height: 32vw;
+  }
+
   @media (max-width: 768px) {
-    height: 40vw;
+    height: 48vw;
+  }
+
+  @media (max-width: 480px) {
+    height: 56vw;
   }
 `;
 
@@ -61,9 +103,30 @@ const SlideTitle = styled.div`
   padding: 20px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   color: white;
+
   h4 {
     font-size: 18px;
     font-weight: 500;
+
+    @media (max-width: 1200px) {
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
   }
 `;
 
@@ -106,27 +169,41 @@ const MainSlider = ({
     slidesToShow: 6,
     slidesToScroll: 6,
     initialSlide: 0,
-    arrows: false, // 기본 화살표 비활성화
+    arrows: false,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 1400,
         settings: {
           slidesToShow: 5,
           slidesToScroll: 5,
         },
       },
       {
-        breakpoint: 1000,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 900,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
         },
       },
     ],

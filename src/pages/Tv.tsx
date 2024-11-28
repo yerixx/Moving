@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
 import Header from "../components/Header";
 import TvModal from "../components/TvModal";
+
 import {
   getPopularTv,
   getOnTheAirTv,
@@ -25,6 +26,11 @@ const Container = styled.div`
   margin-top: 60px;
   background: ${(props) => props.theme.black.darker};
   overflow-x: hidden;
+  min-height: 100vh;
+
+  @media (max-width: 768px) {
+    margin-top: 50px;
+  }
 `;
 
 const Loader = styled.div`
@@ -41,10 +47,14 @@ const SliderWrapper = styled.div`
   position: relative;
   margin-bottom: 100px;
   padding: 0 60px;
+
   .slick-slide {
     padding: 0 50px;
     @media (max-width: 768px) {
       padding: 0 30px;
+    }
+    @media (max-width: 480px) {
+      padding: 0 15px;
     }
   }
 
@@ -59,6 +69,16 @@ const SliderWrapper = styled.div`
     margin-left: 0;
     margin-right: 0;
   }
+
+  @media (max-width: 768px) {
+    padding: 0 30px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 15px;
+    margin-bottom: 40px;
+  }
 `;
 
 const SlideBox = styled(motion.div)<{ $bgPhoto: string }>`
@@ -68,8 +88,17 @@ const SlideBox = styled(motion.div)<{ $bgPhoto: string }>`
   border-radius: 10px;
   position: relative;
   cursor: pointer;
+
+  @media (max-width: 1200px) {
+    height: 35vw;
+  }
+
   @media (max-width: 768px) {
     height: 50vw;
+  }
+
+  @media (max-width: 480px) {
+    height: 60vw;
   }
 `;
 
@@ -80,10 +109,27 @@ const SlideInfo = styled(motion.div)`
   padding: 20px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   opacity: 0;
+
   h4 {
     text-align: center;
     font-size: 16px;
     color: white;
+
+    @media (max-width: 1200px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
   }
 `;
 
@@ -91,6 +137,21 @@ const SlideTitle = styled.h2`
   font-size: 32px;
   margin: 50px 0 30px 50px;
   color: ${(props) => props.theme.white.darker};
+
+  @media (max-width: 1200px) {
+    font-size: 28px;
+    margin: 40px 0 25px 40px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin: 50px 0 20px 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    margin: 50px 0 15px 20px;
+  }
 `;
 
 const SlideRank = styled.span`
@@ -100,9 +161,25 @@ const SlideRank = styled.span`
   top: -10px;
   left: -70px;
   color: ${(props) => props.theme.white.darker};
+
+  @media (max-width: 1200px) {
+    font-size: 70px;
+    left: -60px;
+  }
+
   @media (max-width: 768px) {
-    font-size: 60px;
-    left: -50px;
+    font-size: 50px;
+    left: -45px;
+    top: -5px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+    left: 10px;
+    top: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 6px 10px;
   }
 `;
 
@@ -140,17 +217,38 @@ const Tv = () => {
     arrows: false,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 1400,
         settings: {
-          slidesToShow: 3.2,
+          slidesToShow: 3.5,
           slidesToScroll: 3,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 1200,
         settings: {
-          slidesToShow: 2.2,
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2.5,
           slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -242,21 +340,19 @@ const Tv = () => {
             </Slider>
             <SlideButton direction="next" onClick={handleNext} />
           </SliderWrapper>
-
-          <SlideTitle>최신 TV 프로그램</SlideTitle>
-          <MainSlider
-            genereData={null}
-            data={onTheAirData?.results || []}
-            onBoxClick={(id) => onBoxClick(id, "latest")}
-            sliderId="latest"
-          />
-
           <SlideTitle>높은 평점의 TV 프로그램</SlideTitle>
           <MainSlider
             genereData={null}
             data={topRatedData?.results || []}
             onBoxClick={(id) => onBoxClick(id, "topRated")}
             sliderId="topRated"
+          />
+          <SlideTitle>최신 TV 프로그램</SlideTitle>
+          <MainSlider
+            genereData={null}
+            data={onTheAirData?.results || []}
+            onBoxClick={(id) => onBoxClick(id, "latest")}
+            sliderId="latest"
           />
 
           <AnimatePresence>
