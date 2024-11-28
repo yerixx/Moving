@@ -48,6 +48,10 @@ const SlideItem = styled(motion.div)<{ $bgPhoto: string }>`
   position: relative;
   cursor: pointer;
   transform-origin: center center;
+  overflow: hidden;
+  @media (max-width: 768px) {
+    height: 40vw;
+  }
 `;
 
 const SlideTitle = styled.div`

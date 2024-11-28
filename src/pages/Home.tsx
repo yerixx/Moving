@@ -58,9 +58,19 @@ const SliderWrapper = styled.div`
   padding: 0 60px;
   .slick-slide {
     padding: 0 50px;
+    @media (max-width: 768px) {
+      padding: 0 30px;
+    }
   }
   .slick-list {
     overflow: visible;
+    margin: 0 -10px;
+  }
+  .slick-track {
+    display: flex;
+    align-items: stretch;
+    margin-left: 0;
+    margin-right: 0;
   }
   .slick-prev,
   .slick-next {
@@ -89,6 +99,9 @@ const SlideBox = styled(motion.div)<{ $bgPhoto: string }>`
   &:hover {
     transform: scale(1.02);
     transition: transform 0.3s ease-in-out;
+  }
+  @media (max-width: 768px) {
+    height: 50vw;
   }
 `;
 
@@ -121,6 +134,10 @@ const SlideRank = styled.span`
   top: -10px;
   left: -70px;
   color: ${(props) => props.theme.white.darker};
+  @media (max-width: 768px) {
+    font-size: 60px;
+    left: -50px;
+  }
 `;
 
 const Genere = styled.div`
@@ -264,8 +281,55 @@ const Home = () => {
 
   const BannerSlider = styled.div`
     margin-bottom: 60px;
+    position: relative;
     .slick-slide div {
       outline: none;
+    }
+  `;
+
+  const BannerButton = styled.div<{ direction: string }>`
+    width: 50px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+    ${(props) => (props.direction === "prev" ? "left: 0" : "right: 0")};
+    transition: all 0.2s ease;
+    &:hover {
+      background-color: ${(props) => props.theme.blue};
+      width: 60px;
+    }
+
+    &:active {
+      background-color: ${(props) => props.theme.blue};
+      opacity: 0.8;
+      width: 55px;
+    }
+
+    &::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-top: 3px solid white;
+      border-right: 3px solid white;
+      transform: ${(props) =>
+        props.direction === "prev"
+          ? "rotate(-135deg) translateX(2px)"
+          : "rotate(45deg) translateX(-2px)"};
+      transition: transform 0.2s ease;
+    }
+
+    &:hover::before {
+      transform: ${(props) =>
+        props.direction === "prev"
+          ? "rotate(-135deg) translateX(5px) scale(1.2)"
+          : "rotate(45deg) translateX(-5px) scale(1.2)"};
     }
   `;
 
@@ -291,6 +355,16 @@ const Home = () => {
     arrows: false,
   };
 
+  const bannerSliderRef = useRef<Slider>(null);
+
+  const handleBannerPrev = () => {
+    bannerSliderRef.current?.slickPrev();
+  };
+
+  const handleBannerNext = () => {
+    bannerSliderRef.current?.slickNext();
+  };
+
   return (
     <Container>
       <Header />
@@ -299,7 +373,8 @@ const Home = () => {
       ) : (
         <>
           <BannerSlider>
-            <Slider {...bannerSettings}>
+            <BannerButton direction="prev" onClick={handleBannerPrev} />
+            <Slider ref={bannerSliderRef} {...bannerSettings}>
               {nowPlayingData?.results.slice(0, 5).map((movie) => (
                 <BannerItem
                   key={movie.id}
@@ -310,6 +385,7 @@ const Home = () => {
                 </BannerItem>
               ))}
             </Slider>
+            <BannerButton direction="next" onClick={handleBannerNext} />
           </BannerSlider>
 
           <SliderWrapper>

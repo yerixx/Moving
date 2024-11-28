@@ -195,7 +195,7 @@ const Header = () => {
             </Link>
           </Item>
           <Item>
-            <Link to={"/home"}>
+            <Link to={"/tv"}>
               드라마 {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>

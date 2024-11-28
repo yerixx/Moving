@@ -17,7 +17,6 @@ const ModalBox = styled(motion.div)`
   display: flex;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   z-index: 99;
-
   @media (max-width: 768px) {
     width: 95vw;
     flex-direction: column;
@@ -37,7 +36,7 @@ const Overlay = styled(motion.div)`
   z-index: 98;
 `;
 
-const MovieInfo = styled.div`
+const TvInfo = styled.div`
   flex: 2;
   padding: 40px;
   display: flex;
@@ -61,7 +60,7 @@ const MovieInfo = styled.div`
   }
 `;
 
-const MovieHeader = styled.div`
+const TvHeader = styled.div`
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
@@ -73,7 +72,7 @@ const MovieHeader = styled.div`
   }
 `;
 
-const MoviePoster = styled.div<{ $bgPhoto: string }>`
+const TvPoster = styled.div<{ $bgPhoto: string }>`
   width: 200px;
   height: 300px;
   background: url(${(props) => props.$bgPhoto}) center/cover no-repeat;
@@ -86,11 +85,11 @@ const MoviePoster = styled.div<{ $bgPhoto: string }>`
   }
 `;
 
-const MovieBasicInfo = styled.div`
+const TvBasicInfo = styled.div`
   flex: 1;
 `;
 
-const MovieTitle = styled.h3`
+const TvTitle = styled.h3`
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -99,10 +98,10 @@ const MovieTitle = styled.h3`
   -webkit-text-fill-color: transparent;
 `;
 
-const MovieInfoWrap = styled.div`
+const TvStats = styled.div`
   display: flex;
   gap: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   span {
     padding: 8px 16px;
     border-radius: 20px;
@@ -113,11 +112,34 @@ const MovieInfoWrap = styled.div`
   }
 `;
 
-const MovieOverView = styled.p`
+const TvOverView = styled.p`
   font-size: 18px;
   line-height: 1.8;
   margin-bottom: 40px;
   color: rgba(255, 255, 255, 0.8);
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: ${(props) => props.theme.blue};
+  display: flex;
+  align-items: center;
+  &:before {
+    margin-right: 10px;
+  }
+`;
+
+const ReviewTitle = styled(SectionTitle)`
+  &:before {
+    content: "✍️";
+  }
+`;
+
+const VideoTitle = styled(SectionTitle)`
+  &:before {
+    content: "🎬";
+  }
 `;
 
 const ReviewSection = styled.div`
@@ -125,18 +147,6 @@ const ReviewSection = styled.div`
   background: rgba(0, 0, 0, 0.3);
   border-radius: 15px;
   margin-bottom: 40px;
-`;
-
-const ReviewTitle = styled.h3`
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: ${(props) => props.theme.blue};
-  display: flex;
-  align-items: center;
-  &:before {
-    content: "✍️";
-    margin-right: 10px;
-  }
 `;
 
 const ReviewItem = styled.div`
@@ -179,18 +189,6 @@ const VideoSection = styled.div`
   }
 `;
 
-const VideoTitle = styled.h3`
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: ${(props) => props.theme.blue};
-  display: flex;
-  align-items: center;
-  &:before {
-    content: "🎬";
-    margin-right: 10px;
-  }
-`;
-
 const VideoItem = styled.div`
   margin-bottom: 40px;
   &:last-child {
@@ -198,7 +196,7 @@ const VideoItem = styled.div`
   }
 `;
 
-const MovieBackground = styled.div<{ $bgPhoto: string }>`
+const TvBackground = styled.div<{ $bgPhoto: string }>`
   flex: 1.2;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent),
     url(${(props) => props.$bgPhoto}) center/cover no-repeat;
@@ -223,8 +221,8 @@ const NoContent = styled.p`
   padding: 20px;
 `;
 
-interface MovieModalProps {
-  movie: any;
+interface TvModalProps {
+  tv: any;
   onOverlayClick: () => void;
   layoutId: string;
   scrollY: number;
@@ -232,14 +230,14 @@ interface MovieModalProps {
   videosData: any[];
 }
 
-const MovieModal = ({
-  movie,
+const TvModal = ({
+  tv,
   onOverlayClick,
   layoutId,
   scrollY,
   reviewsData,
   videosData,
-}: MovieModalProps) => {
+}: TvModalProps) => {
   return (
     <>
       <Overlay
@@ -258,26 +256,26 @@ const MovieModal = ({
           },
         }}
       >
-        <MovieInfo>
-          <MovieHeader>
-            <MoviePoster $bgPhoto={makeImagePath(movie.poster_path)} />
-            <MovieBasicInfo>
-              <MovieTitle>{movie.title}</MovieTitle>
-              <MovieInfoWrap>
-                <span>⭐ {movie.vote_average.toFixed(1)}</span>
-                <span>👥 {movie.popularity.toFixed(0)}</span>
-                <span>📅 {movie.release_date}</span>
-              </MovieInfoWrap>
-              <MovieOverView>{movie.overview}</MovieOverView>
-            </MovieBasicInfo>
-          </MovieHeader>
+        <TvInfo>
+          <TvHeader>
+            <TvPoster $bgPhoto={makeImagePath(tv.poster_path)} />
+            <TvBasicInfo>
+              <TvTitle>{tv.name}</TvTitle>
+              <TvStats>
+                <span>⭐ {tv.vote_average.toFixed(1)}</span>
+                <span>👥 {tv.popularity.toFixed(0)}</span>
+                <span>📅 {tv.first_air_date}</span>
+              </TvStats>
+              <TvOverView>{tv.overview}</TvOverView>
+            </TvBasicInfo>
+          </TvHeader>
 
           <ReviewSection>
-            <ReviewTitle>리뷰</ReviewTitle>
-            {reviewsData?.find((review: any) => review.id === movie.id)?.results
+            <ReviewTitle>시청자 리뷰</ReviewTitle>
+            {reviewsData?.find((review: any) => review.id === tv.id)?.results
               .length ? (
               reviewsData
-                ?.find((review: any) => review.id === movie.id)
+                ?.find((review: any) => review.id === tv.id)
                 ?.results.slice(0, 5)
                 .map((review: any) => (
                   <ReviewItem key={review.id}>
@@ -297,7 +295,7 @@ const MovieModal = ({
           <VideoSection>
             <VideoTitle>관련 영상</VideoTitle>
             {videosData
-              ?.find((video: any) => video.id === movie.id)
+              ?.find((video: any) => video.id === tv.id)
               ?.results.slice(0, 3)
               .map((video: any) => (
                 <VideoItem key={video.id}>
@@ -317,11 +315,11 @@ const MovieModal = ({
                 </VideoItem>
               ))}
           </VideoSection>
-        </MovieInfo>
-        <MovieBackground $bgPhoto={makeImagePath(movie.backdrop_path)} />
+        </TvInfo>
+        <TvBackground $bgPhoto={makeImagePath(tv.backdrop_path)} />
       </ModalBox>
     </>
   );
 };
 
-export default MovieModal;
+export default TvModal;

@@ -73,3 +73,58 @@ export const getVideos = (movieId: number) => {
     `${BASE_PATH}/movie/${movieId}/videos?api_key=${API_KEY}&language=ko-KR`
   ).then((response) => response.json());
 };
+
+// TV 프로그램 인터페이스
+export interface ITv {
+  id: number;
+  name: string;
+  overview: string;
+  backdrop_path: string;
+  poster_path: string;
+  vote_average: number;
+  first_air_date: string;
+  popularity: number;
+  genre_ids: number[];
+}
+
+export interface ITvResult {
+  page: number;
+  results: ITv[];
+  total_pages: number;
+  total_results: number;
+}
+
+// 인기 TV 프로그램
+export function getPopularTv() {
+  return fetch(
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR`
+  ).then((response) => response.json());
+}
+
+// 최신 TV 프로그램 (방영중)
+export function getOnTheAirTv() {
+  return fetch(
+    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR`
+  ).then((response) => response.json());
+}
+
+// 높은 평점의 TV 프로그램
+export function getTopRatedTv() {
+  return fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR`
+  ).then((response) => response.json());
+}
+
+// TV 프로그램 리뷰
+export function getTvReviews(tvId: number) {
+  return fetch(`${BASE_PATH}/tv/${tvId}/reviews?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
+
+// TV 프로그램 비디오
+export function getTvVideos(tvId: number) {
+  return fetch(`${BASE_PATH}/tv/${tvId}/videos?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
