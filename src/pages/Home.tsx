@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { motion, AnimatePresence, delay, useScroll } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import {
   getMovies,
   getTodayMovies,

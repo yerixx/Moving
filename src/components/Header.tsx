@@ -167,7 +167,7 @@ const Header = () => {
         navAnimation.start("top");
       }
     });
-  }, [scrollY]);
+  }, [scrollY, navAnimation]);
 
   const openSearch = () => {
     if (searchOpen) {
