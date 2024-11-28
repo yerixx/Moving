@@ -19,6 +19,7 @@ import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
 import YouTube from "react-youtube";
 import Header from "../components/Header";
+import MovieModal from "../components/MovieModal";
 
 const Container = styled.div`
   width: 100%;
@@ -146,180 +147,6 @@ const SubTitle = styled.h2`
   color: ${(props) => props.theme.white.darker};
 `;
 
-// const Row = styled(motion.div)`
-//   position: absolute;
-//   width: 100%;
-//   display: grid;
-//   grid-template-columns: repeat(4, 1fr);
-//   gap: 100px;
-//   margin-bottom: 10px;
-//   padding-left: 100px;
-//   padding-right: 60px;
-// `;
-
-// const Box = styled(motion.div)<{ $bgPhoto: string | undefined }>`
-//   width: auto;
-//   height: 25vw;
-//   background: url(${(props) => props.$bgPhoto}) center/cover no-repeat;
-//   font-size: 22px;
-//   position: relative;
-//   border-radius: 4px;
-//   cursor: pointer;
-//   &:first-child {
-//     transform-origin: center left;
-//   }
-//   &:last-child {
-//     transform-origin: center right;
-//   }
-// `;
-
-// const Info = styled(motion.div)`
-//   width: 100%;
-//   height: 80px;
-//   padding: 20px;
-//   opacity: 1;
-//   position: absolute;
-//   bottom: -17px;
-//   background: rgba(0, 0, 0, 0);
-//   color: #ffffffd6;
-//   h4 {
-//     text-align: center;
-//     font-size: 16px;
-//   }
-// `;
-
-const ModalBox = styled(motion.div)`
-  position: absolute;
-  left: 0%;
-  right: 0%;
-  margin: 0 auto;
-  width: 80vw;
-  height: 70vh;
-  background-color: ${(props) => props.theme.black.lighter};
-  color: ${(props) => props.theme.white.darker};
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-`;
-
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-`;
-
-const MovieCover = styled.div`
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  flex: 1;
-  margin: 20px;
-  border-radius: 12px;
-`;
-
-const MovieInfo = styled.div`
-  flex: 2;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  span {
-    padding: 0 20px;
-    font-size: 18px;
-  }
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;
-`;
-
-const MovieTitle = styled.h3`
-  font-size: 60px;
-  padding: 10px;
-  color: ${(props) => props.theme.white.darker};
-  /* color: ${(props) => props.theme.blue}; */
-`;
-
-const MovieInfoWrap = styled.div`
-  display: flex;
-  span {
-    padding: 0 20px;
-    font-size: 18px;
-    font-weight: 600;
-  }
-`;
-
-const MovieOverView = styled.p`
-  padding: 20px;
-  line-height: 2;
-  font-size: 18px;
-`;
-
-const ReviewSection = styled.div`
-  padding: 20px;
-`;
-
-const ReviewTitle = styled.h3`
-  margin-bottom: 15px;
-  color: ${(props) => props.theme.blue};
-`;
-
-const ReviewItem = styled.div`
-  margin-bottom: 20px;
-`;
-const VideoSection = styled.div`
-  padding: 20px;
-  .youtube-container {
-    margin-bottom: 20px;
-  }
-`;
-
-const VideoItem = styled.div`
-  margin-bottom: 30px;
-  /* width: 100%; */
-  /* height: 100%; */
-  /* aspect-ratio: 16/9; */
-`;
-
-const VideoTitle = styled.h3`
-  margin-bottom: 15px;
-  color: ${(props) => props.theme.blue};
-`;
-
-// const rowVariants = {
-//   hidden: {
-//     x: window.innerWidth + 10,
-//   },
-//   visible: {
-//     x: 0,
-//   },
-//   exit: {
-//     x: -window.innerWidth - 10,
-//   },
-// };
-
-// const boxVariants = {
-//   normal: { scale: 1 },
-//   hover: {
-//     scale: 1.2,
-//     y: -50,
-//     transition: { delay: 0.3, type: "tween" },
-//     zIndex: 1,
-//   },
-// };
-
-// const infoVariants = {
-//   hover: {
-//     bottom: "0",
-//     background: "rgba(0, 0, 0, 0.5)",
-//     color: "#fff",
-//     transition: { delay: 0.3, type: "tween" },
-//   },
-// };
-
 const offset = 4;
 
 const Home = () => {
@@ -368,7 +195,10 @@ const Home = () => {
 
   // const toggleLeaving = () => setLeaving((prev) => !prev);
 
-  const onBoxClick = (movieId: number) => {
+  const [currentSection, setCurrentSection] = useState("hot");
+
+  const onBoxClick = (movieId: number, section?: string) => {
+    if (section) setCurrentSection(section);
     history(`/home/movies/${movieId}`);
   };
   const onOverlayClick = () => {
@@ -377,22 +207,34 @@ const Home = () => {
 
   const clickedMovie =
     movieMatch?.params.movieId &&
-    nowPlayingData?.results.find(
+    (nowPlayingData?.results.find(
       (movie) => String(movie.id) === movieMatch.params.movieId
-    );
+    ) ||
+      todayData?.results.find(
+        (movie) => String(movie.id) === movieMatch.params.movieId
+      ));
 
-  const ids = nowPlayingData?.results.map((movie) => movie.id);
+  const allMovieIds = [
+    ...(nowPlayingData?.results || []),
+    ...(todayData?.results || []),
+  ].map((movie) => movie.id);
+
   const { data: reviewsData, isLoading: reviewsLoading } = useQuery({
-    queryKey: ["getReviews", ids],
+    queryKey: ["getReviews", allMovieIds],
     queryFn: () =>
-      ids ? Promise.all(ids.map((id) => getReviews(id))) : Promise.resolve([]),
-    enabled: !!ids,
+      allMovieIds
+        ? Promise.all(allMovieIds.map((id) => getReviews(id)))
+        : Promise.resolve([]),
+    enabled: !!allMovieIds.length,
   });
+
   const { data: videosData, isLoading: videosLoading } = useQuery({
-    queryKey: ["getVideos", ids],
+    queryKey: ["getVideos", allMovieIds],
     queryFn: () =>
-      ids ? Promise.all(ids.map((id) => getVideos(id))) : Promise.resolve([]),
-    enabled: !!ids,
+      allMovieIds
+        ? Promise.all(allMovieIds.map((id) => getVideos(id)))
+        : Promise.resolve([]),
+    enabled: !!allMovieIds.length,
   });
 
   const settings = {
@@ -477,8 +319,8 @@ const Home = () => {
               {nowPlayingData?.results.slice(0, 10).map((movie, index) => (
                 <SlideBox
                   key={movie.id}
-                  onClick={() => onBoxClick(movie.id)}
-                  layoutId={movie.id + ""}
+                  onClick={() => onBoxClick(movie.id, "hot")}
+                  layoutId={`hot-${movie.id}`}
                   $bgPhoto={makeImagePath(movie.poster_path || "")}
                   whileHover="hover"
                 >
@@ -513,88 +355,34 @@ const Home = () => {
           <MainSlider
             genereData={genereData}
             data={nowPlayingData?.results || []}
+            onBoxClick={(id) => onBoxClick(id, "recommend")}
+            sliderId="recommend"
           />
           <SubTitle>당신이 찾고있는 영화!</SubTitle>
-          <MainSlider genereData={genereData} data={todayData?.results || []} />
+          <MainSlider
+            genereData={genereData}
+            data={todayData?.results || []}
+            onBoxClick={(id) => onBoxClick(id, "search")}
+            sliderId="search"
+          />
           <SubTitle>내가 최근에 시청한 영화!</SubTitle>
-          <MainSlider genereData={genereData} data={todayData?.results || []} />
+          <MainSlider
+            genereData={genereData}
+            data={todayData?.results || []}
+            onBoxClick={(id) => onBoxClick(id, "recent")}
+            sliderId="recent"
+          />
 
           <AnimatePresence>
-            {movieMatch && (
-              <>
-                <Overlay
-                  onClick={onOverlayClick}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                <ModalBox
-                  style={{ top: scrollY.get() + 100 }}
-                  layoutId={movieMatch.params.movieId}
-                >
-                  {clickedMovie && (
-                    <>
-                      <MovieInfo>
-                        <MovieTitle>{clickedMovie.title}</MovieTitle>
-                        <MovieInfoWrap>
-                          <span>관객수 : {clickedMovie.popularity}</span>
-                          <span>
-                            평점 : {clickedMovie.vote_average.toFixed(2)}
-                          </span>
-                        </MovieInfoWrap>
-                        <MovieOverView>{clickedMovie.overview}</MovieOverView>
-                        <ReviewSection>
-                          <ReviewTitle>리뷰</ReviewTitle>
-                          {reviewsData
-                            ?.find(
-                              (review: any) => review.id === clickedMovie.id
-                            )
-                            ?.results.slice(0, 5)
-                            .map((review: any) => (
-                              <ReviewItem key={review.id}>
-                                <h5>✍️ {review.author}</h5>
-                                <p>
-                                  {review.content.length > 200
-                                    ? `${review.content.slice(0, 200)}...`
-                                    : review.content}
-                                </p>
-                              </ReviewItem>
-                            ))}
-                        </ReviewSection>
-                        <VideoSection>
-                          {videosData
-                            ?.find((video: any) => video.id === clickedMovie.id)
-                            ?.results.slice(0, 5)
-                            .map((video: any) => (
-                              <VideoItem key={video.id}>
-                                <VideoTitle>{video.name}</VideoTitle>
-                                <YouTube
-                                  videoId={video.key}
-                                  opts={{
-                                    width: "100%",
-                                    height: "500px",
-                                    playerVars: {
-                                      autoplay: 0,
-                                      modestbranding: 1,
-                                      rel: 0,
-                                    },
-                                  }}
-                                  className="youtube-container"
-                                />
-                              </VideoItem>
-                            ))}
-                        </VideoSection>
-                      </MovieInfo>
-                      <MovieCover
-                        style={{
-                          backgroundImage: `linear-gradient(to top, #00000068, transparent), url(${makeImagePath(
-                            clickedMovie.poster_path
-                          )})`,
-                        }}
-                      />
-                    </>
-                  )}
-                </ModalBox>
-              </>
+            {movieMatch && clickedMovie && (
+              <MovieModal
+                movie={clickedMovie}
+                onOverlayClick={onOverlayClick}
+                layoutId={`${currentSection}-${movieMatch.params.movieId}`}
+                scrollY={scrollY.get()}
+                reviewsData={reviewsData || []}
+                videosData={videosData || []}
+              />
             )}
           </AnimatePresence>
         </>

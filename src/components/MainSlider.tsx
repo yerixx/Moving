@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { styled } from "styled-components";
 import { useRef, useState, useEffect } from "react";
 import SlideButton from "./SlideButton";
+import { motion } from "framer-motion";
 
 // 이미지 경로 생성 유틸리티 함수
 const makeImagePath = (path: string) => {
@@ -39,17 +40,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const SlideItem = styled.div<{ $bgPhoto: string }>`
+const SlideItem = styled(motion.div)<{ $bgPhoto: string }>`
   width: 100%;
   height: 24vw;
   background: url(${(props) => props.$bgPhoto}) center/cover no-repeat;
   border-radius: 8px;
   position: relative;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.02);
-    transition: transform 0.3s ease-in-out;
-  }
+  transform-origin: center center;
 `;
 
 const SlideTitle = styled.div`
@@ -65,7 +63,19 @@ const SlideTitle = styled.div`
   }
 `;
 
-const MainSlider = ({ data }: any) => {
+interface MainSliderProps {
+  data: any[];
+  genereData: any;
+  onBoxClick: (movieId: number) => void;
+  sliderId: string;
+}
+
+const MainSlider = ({
+  data,
+  genereData,
+  onBoxClick,
+  sliderId,
+}: MainSliderProps) => {
   const sliderRef = useRef<Slider>(null);
   const [randomizedData, setRandomizedData] = useState<any[]>([]);
 
@@ -126,6 +136,12 @@ const MainSlider = ({ data }: any) => {
           <SlideItem
             key={item.id}
             $bgPhoto={makeImagePath(item.poster_path || "")}
+            onClick={() => onBoxClick(item.id)}
+            whileHover={{ scale: 1.02 }}
+            transition={{
+              type: "tween",
+              duration: 0.3,
+            }}
           >
             <SlideTitle>
               <h4>{item.title}</h4>
