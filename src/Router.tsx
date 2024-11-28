@@ -37,7 +37,15 @@ const router = createBrowserRouter([
         element: <Tv />,
       },
       {
+        path: "/tv/:tvId",
+        element: <Tv />,
+      },
+      {
         path: "/home/search",
+        element: <Search />,
+      },
+      {
+        path: "/home/search/movies/:movieId",
         element: <Search />,
       },
     ],

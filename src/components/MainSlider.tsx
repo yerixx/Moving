@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { styled } from "styled-components";
 import { useRef, useState, useEffect } from "react";
 import SlideButton from "./SlideButton";
+import { motion } from "framer-motion";
 
 // 이미지 경로 생성 유틸리티 함수
 const makeImagePath = (path: string) => {
@@ -16,12 +17,19 @@ const Wrapper = styled.div`
   margin-bottom: 60px;
   position: relative;
   padding: 0 30px;
+
   .slick-slide {
     padding: 0 10px;
+
+    @media (max-width: 768px) {
+      padding: 0 5px;
+    }
   }
+
   .slick-list {
-    /* overflow: visible; */
+    overflow: visible;
   }
+
   .slick-prev,
   .slick-next {
     z-index: 1;
@@ -30,25 +38,61 @@ const Wrapper = styled.div`
     &:before {
       font-size: 40px;
     }
+
+    @media (max-width: 768px) {
+      width: 30px;
+      height: 30px;
+      &:before {
+        font-size: 30px;
+      }
+    }
   }
+
   .slick-prev {
     left: 25px;
+    @media (max-width: 768px) {
+      left: 15px;
+    }
   }
+
   .slick-next {
     right: 25px;
+    @media (max-width: 768px) {
+      right: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 40px;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 30px;
+    padding: 0 15px;
   }
 `;
 
-const SlideItem = styled.div<{ $bgPhoto: string }>`
+const SlideItem = styled(motion.div)<{ $bgPhoto: string }>`
   width: 100%;
   height: 24vw;
   background: url(${(props) => props.$bgPhoto}) center/cover no-repeat;
   border-radius: 8px;
   position: relative;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.02);
-    transition: transform 0.3s ease-in-out;
+  transform-origin: center center;
+  overflow: hidden;
+
+  @media (max-width: 1200px) {
+    height: 32vw;
+  }
+
+  @media (max-width: 768px) {
+    height: 48vw;
+  }
+
+  @media (max-width: 480px) {
+    height: 56vw;
   }
 `;
 
@@ -59,13 +103,46 @@ const SlideTitle = styled.div`
   padding: 20px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   color: white;
+
   h4 {
     font-size: 18px;
     font-weight: 500;
+
+    @media (max-width: 1200px) {
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
   }
 `;
 
-const MainSlider = ({ data }: any) => {
+interface MainSliderProps {
+  data: any[];
+  genereData: any;
+  onBoxClick: (movieId: number) => void;
+  sliderId: string;
+}
+
+const MainSlider = ({
+  data,
+  genereData,
+  onBoxClick,
+  sliderId,
+}: MainSliderProps) => {
   const sliderRef = useRef<Slider>(null);
   const [randomizedData, setRandomizedData] = useState<any[]>([]);
 
@@ -92,27 +169,41 @@ const MainSlider = ({ data }: any) => {
     slidesToShow: 6,
     slidesToScroll: 6,
     initialSlide: 0,
-    arrows: false, // 기본 화살표 비활성화
+    arrows: false,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 1400,
         settings: {
           slidesToShow: 5,
           slidesToScroll: 5,
         },
       },
       {
-        breakpoint: 1000,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 900,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -126,6 +217,12 @@ const MainSlider = ({ data }: any) => {
           <SlideItem
             key={item.id}
             $bgPhoto={makeImagePath(item.poster_path || "")}
+            onClick={() => onBoxClick(item.id)}
+            whileHover={{ scale: 1.02 }}
+            transition={{
+              type: "tween",
+              duration: 0.3,
+            }}
           >
             <SlideTitle>
               <h4>{item.title}</h4>
