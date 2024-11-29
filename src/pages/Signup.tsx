@@ -63,6 +63,12 @@ const Signup = () => {
     }
   };
 
+  const handlePhoneInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value; // value를 안전하게 추출
+    const isValidLength = value.length >= 11; // 입력 길이가 11 이상인지 확인
+    setIsPhoneValid(isValidLength); // 버튼 활성화 여부 업데이트
+  };
+
   const sendVerificationCode = () => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
@@ -76,7 +82,7 @@ const Signup = () => {
       return;
     }
     alert(`축하합니다 ${userId}님! 회원 가입이 성공적으로 완료되었습니다`);
-    navigate("/");
+    navigate("/home");
   };
 
   return (
@@ -151,6 +157,9 @@ const Signup = () => {
                   value: 8,
                   message: "비밀번호는 최소 8자 이상 입력해주세요",
                 },
+                validate: (value) =>
+                  value === getValues("password") ||
+                  "비밀번호가 일치하지 않습니다.",
               })}
               type="password"
               onFocus={() => handleFocus("passwordChack")}
@@ -206,6 +215,7 @@ const Signup = () => {
                 type="text"
                 onFocus={() => handleFocus("phoneNum")}
                 onBlur={(e) => handleBlur("phoneNum", e.target.value)}
+                onInput={handlePhoneInput} // 수정된 이벤트 핸들러 사용
                 hasError={!!errors.phoneNum}
               />
               <Label

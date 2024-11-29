@@ -204,7 +204,6 @@ const Genere = styled.div`
   left: 10px;
   color: ${(props) => props.theme.white.darker};
   font-size: 14px;
-
   span {
     padding: 2px 6px;
     border-radius: 4px;

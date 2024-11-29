@@ -10,9 +10,15 @@ export const Wrapper = styled.main`
   align-items: center;
   gap: 40px;
   background: url("img/MainGuestCover.png") center/cover no-repeat;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 export const Logo = styled.section`
   scale: 1.3;
+  @media (max-width: 768px) {
+    scale: 1;
+  }
 `;
 export const Container = styled.section``;
 export const Title = styled.h1`
@@ -22,6 +28,9 @@ export const Title = styled.h1`
   text-align: center;
   white-space: pre-line;
   color: ${({ theme }) => theme.white.lighter};
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 export const Buttons = styled.article`
   display: flex;
@@ -52,6 +61,20 @@ export const GoLink = styled(Link)`
     border: 1px solid ${({ theme }) => theme.white.lighter};
     &:hover {
       background: rgba(0, 0, 0, 0.1);
+    }
+  }
+  @media (max-width: 768px) {
+    width: 80%;
+    font-size: 16px;
+    &:first-child {
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &:last-child {
+      &:hover {
+        background: rgba(0, 0, 0, 0);
+      }
     }
   }
 `;

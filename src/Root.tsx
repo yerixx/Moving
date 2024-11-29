@@ -50,21 +50,11 @@ const Root = () => {
 
   const goToLogin = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const handleConfirm = window.confirm("로그인 페이지로 이동하시겠습니까?");
-
-    if (handleConfirm) {
-      navigate("/login");
-    }
+    navigate("/login");
   };
   const goToSignup = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-
-    const handleconfirm: boolean = window.confirm(
-      "회원가입 페이지로 이동하시겠습니까?"
-    );
-    if (handleconfirm) {
-      navigate("/signup");
-    }
+    navigate("/signup");
   };
 
   return (

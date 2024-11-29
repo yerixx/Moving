@@ -71,10 +71,25 @@ const Item = styled.li`
 
     @media (max-width: 768px) {
       font-size: 15px;
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 `;
-
+const LoginLogout = styled.div`
+  button {
+    background: inherit;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    @media (max-width: 768px) {
+      font-size: 15px;
+      padding-bottom: 6px;
+    }
+  }
+`;
 const Search = styled.form`
   display: flex;
   align-items: center;
@@ -139,6 +154,8 @@ interface IForm {
 
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
@@ -190,6 +207,10 @@ const Header = () => {
     setSearchOpen((prev) => !prev);
   };
 
+  const handleLoginLogout = () => {
+    setIsLoggedIn(true);
+    navigate("/");
+  };
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
       <Col>
@@ -233,6 +254,11 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
+        <LoginLogout>
+          <button onClick={handleLoginLogout}>
+            {isLoggedIn ? "로그인" : "로그아웃"}
+          </button>
+        </LoginLogout>
         <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={openSearch}
