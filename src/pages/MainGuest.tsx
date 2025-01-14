@@ -21,8 +21,7 @@ const MainGuest = () => {
       <Container>
         <Title>
           {`드라마, 예능, 영화, 스포츠를 한번에!
-          지금 시작하세요!!!
-          MOVING!`}
+          지금 시작하세요!!!`}
         </Title>
         <Buttons>
           <GoLink to={"/login"} onClick={goToLogin}>
