@@ -17,7 +17,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import MovieModal from "../components/MovieModal";
 
 const Container = styled.div`
@@ -89,10 +89,9 @@ const Overview = styled.p`
 const SliderWrapper = styled.div`
   position: relative;
   margin-bottom: 100px;
-  padding: 0 60px;
-
+  padding: 0 30px;
   .slick-slide {
-    padding: 0 50px;
+    padding-left: 80px;
     @media (max-width: 768px) {
       padding: 0 30px;
     }

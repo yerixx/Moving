@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { makeImagePath } from "../utils";
 import Pagination from "react-js-pagination";
 import { useState } from "react";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import { AnimatePresence, useScroll, motion } from "framer-motion";
 import MovieModal from "../components/MovieModal";
 

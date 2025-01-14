@@ -9,7 +9,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SlideButton from "../components/SlideButton";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import TvModal from "../components/TvModal";
 
 import {
